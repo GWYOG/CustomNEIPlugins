@@ -1,0 +1,8 @@
+# Example StackInfo Plugin
+examplemod.neiplguin.apple.title.name=Apple
+examplemod.neiplguin.apple.content.info1=Here should be something about the apple, but I'm too lazy to translate the Chinese sentences into English. Sorry!
+examplemod.neiplguin.apple.content.info2=Still should be something about the apple! Missing contents because I'm too lazy.
+
+# Example MachineRecipe Plugin
+AchangCraft.neiplguin.minerTier1.title.name=Miner Tier 1
+examplemod.neiplguin.fakeCraftingTableRecipe.title.name=Fake Crafting Table Recipe

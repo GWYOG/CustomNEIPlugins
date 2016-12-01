@@ -1,0 +1,16 @@
+[
+{
+  "modid": "customneiplugins",
+  "name": "Custom NEI Plugins",
+  "description": "A forge mod which allows players to make custom NEI plugins by writing json files.",
+  "version": "1.0.0",
+  "mcversion": "1.7.10",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["GWYOG"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": ["NotEnoughItems"]
+}
+]

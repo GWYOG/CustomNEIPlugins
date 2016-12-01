@@ -1,0 +1,8 @@
+# Example StackInfo Plugin
+examplemod.neiplguin.apple.title.name=苹果
+examplemod.neiplguin.apple.content.info1=苹果(学名：MalusPumila)是蔷薇科苹果亚科苹果属植物，其树为落叶乔木。苹果的果实富含矿物质和维生素，是人们最常食用的水果之一。
+examplemod.neiplguin.apple.content.info2=苹果是一种低热量食物，每100克只产生60千卡热量。苹果中营养成份可溶性大，易被人体吸收，故有“活水”之称，其有利于溶解硫元素，使皮肤润滑柔嫩。据说“每天一苹果，医生远离我”。
+
+# Example MachineRecipe Plugin
+AchangCraft.neiplguin.minerTier1.title.name=热能采掘机
+examplemod.neiplguin.fakeCraftingTableRecipe.title.name=假的合成台配方
