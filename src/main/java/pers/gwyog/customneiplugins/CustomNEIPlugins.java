@@ -17,7 +17,7 @@ import pers.gwyog.customneiplugins.plugin.NEIPluginConfig;
 public class CustomNEIPlugins {
     public static final String MODID = "customneiplugins";
     public static final String MODNAME = "CustomNEIPlugins";
-    public static final String VERSION = "1.0.0";
+    public static final String VERSION = "1.0.1";
     
     public static boolean isCustomStuff2Loaded;
     
