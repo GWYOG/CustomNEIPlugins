@@ -3,7 +3,6 @@
 	"plugin_enabled": "false",
 	"plugin_recipe_per_page": "1",
 	"plugin_unlocalized_title_name": "examplemod.neiplguin.apple.title.name",
-	"plugin_gui_texture": "customneiplugins:textures/gui/nei/guiBase.png",
 	"plugin_content":[
 		{
 			"item": "minecraft:apple",

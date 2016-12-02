@@ -202,32 +202,36 @@ public class ConfigLoader {
                     JsonObject recipe = pluginRecipes.get(i).getAsJsonObject();
                     // Load the inputs
                     List<ItemStack> stacks = new ArrayList<ItemStack>();
-                    List<String> strings = new ArrayList<String>();
+                    List<Boolean> oredicts = new ArrayList<Boolean>();
                     List<Integer> posXs = new ArrayList<Integer>();
                     List<Integer> posYs = new ArrayList<Integer>();
                     JsonArray jsonInputStacks = recipe.get("inputs").getAsJsonArray();
                     for (int j = 0; j < jsonInputStacks.size(); j++) {
                         JsonObject jsonInputStack = jsonInputStacks.get(j).getAsJsonObject();
                         stacks.add(findItemsStack(jsonInputStack.get("item").getAsString(), jsonInputStack.get("stacksize").getAsInt()));
+                        oredicts.add(jsonInputStack.get("oredict").getAsBoolean());
                         posXs.add(jsonInputStack.get("posX").getAsInt());
                         posYs.add(jsonInputStack.get("posY").getAsInt());
                     }
-                    listInputRecipe.add(new ComponentInputStacks(stacks, posXs, posYs));               
+                    listInputRecipe.add(new ComponentInputStacks(stacks, oredicts, posXs, posYs));               
                     
                     // Load the outputs
                     stacks = new ArrayList<ItemStack>();
+                    oredicts = new ArrayList<Boolean>();
                     posXs = new ArrayList<Integer>();
                     posYs = new ArrayList<Integer>();
                     JsonArray jsonOutputStacks = recipe.get("outputs").getAsJsonArray();
                     for (int j = 0; j < jsonOutputStacks.size(); j++) {
                         JsonObject jsonOutputStack = jsonOutputStacks.get(j).getAsJsonObject();
                         stacks.add(findItemsStack(jsonOutputStack.get("item").getAsString(), jsonOutputStack.get("stacksize").getAsInt()));
+                        oredicts.add(jsonOutputStack.get("oredict_search").getAsBoolean());
                         posXs.add(jsonOutputStack.get("posX").getAsInt());
                         posYs.add(jsonOutputStack.get("posY").getAsInt());
                     }
-                    listOutputRecipe.add(new ComponentOutputStacks(stacks, posXs, posYs));
+                    listOutputRecipe.add(new ComponentOutputStacks(stacks, oredicts, posXs, posYs));
                     
                     // Load the strings
+                    List<String> strings = new ArrayList<String>();
                     posXs = new ArrayList<Integer>();
                     posYs = new ArrayList<Integer>();
                     JsonArray jsonExtraStrings = recipe.get("strings").getAsJsonArray();

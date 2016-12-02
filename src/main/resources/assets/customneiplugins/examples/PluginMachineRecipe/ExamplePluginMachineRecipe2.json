@@ -37,11 +37,11 @@
 	"plugin_recipes":[
 		{
 			"inputs":[ 
-				{"item": "minecraft:coal", "stacksize": "1", "posX": "51", "posY": "19"},
-				{"item": "AchangCraft:oreIron", "stacksize": "1", "posX": "78", "posY": "45"}
+				{"item": "minecraft:coal", "stacksize": "1", "oredict": "false", "posX": "51", "posY": "19"},
+				{"item": "AchangCraft:oreIron", "stacksize": "1", "oredict": "false", "posX": "78", "posY": "45"}
 			],
 			"outputs":[
-				{"item": "Magneticraft:item.chunks", "stacksize": "1", "posX": "111", "posY": "19"}
+				{"item": "Magneticraft:item.chunks", "stacksize": "1", "oredict_search": "false", "posX": "111", "posY": "19"}
 			],
 			"strings":[ 
 				{"string": "78s", "posX": "86", "posY": "36"}
@@ -49,11 +49,11 @@
 		},
 		{
 			"inputs":[ 
-				{"item": "minecraft:coal", "stacksize": "1", "posX": "51", "posY": "19"},
-				{"item": "AchangCraft:oreGold", "stacksize": "1", "posX": "78", "posY": "45"}
+				{"item": "minecraft:coal", "stacksize": "1", "oredict": "false", "posX": "51", "posY": "19"},
+				{"item": "AchangCraft:oreGold", "stacksize": "1", "oredict": "false", "posX": "78", "posY": "45"}
 			],
 			"outputs":[
-				{"item": "Magneticraft:item.chunks:1", "stacksize": "1", "posX": "111", "posY": "19"}
+				{"item": "Magneticraft:item.chunks:1", "stacksize": "1", "oredict_search": "false", "posX": "111", "posY": "19"}
 			],
 			"strings":[ 
 				{"string": "78s", "posX": "86", "posY": "36"}

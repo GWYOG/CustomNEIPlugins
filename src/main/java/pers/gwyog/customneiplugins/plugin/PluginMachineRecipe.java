@@ -60,8 +60,10 @@ public class PluginMachineRecipe extends PluginBase {
             this.listInput = new ArrayList<PositionedStack>();
             this.listOutput = new ArrayList<PositionedStack>();
             for (int i = 0; i < componentInputStacks.inputs.size(); i++)
-                if (componentInputStacks.inputs.get(i) != null)
-                    listInput.add(new PositionedStack(componentInputStacks.inputs.get(i), componentInputStacks.posX.get(i), componentInputStacks.posY.get(i)));               
+                if (componentInputStacks.inputs.get(i) != null) {
+                    PositionedStack positionedStack = componentInputStacks.oredicts.get(i)? new PositionedStack(ItemStackUtils.getEquivalentItemStacks(componentInputStacks.inputs.get(i)), componentInputStacks.posX.get(i), componentInputStacks.posY.get(i)): new PositionedStack(componentInputStacks.inputs.get(i), componentInputStacks.posX.get(i), componentInputStacks.posY.get(i)); 
+                    listInput.add(positionedStack);               
+                }
             for (int i = 0; i < componentOutputStacks.outputs.size(); i++)
                 if (componentOutputStacks.outputs.get(i) != null)
                     listOutput.add(new PositionedStack(componentOutputStacks.outputs.get(i), componentOutputStacks.posX.get(i), componentOutputStacks.posY.get(i)));
@@ -69,7 +71,9 @@ public class PluginMachineRecipe extends PluginBase {
         }
         
         @Override
-        public List<PositionedStack> getIngredients() { 
+        public List<PositionedStack> getIngredients() {
+            for (PositionedStack inputPositionStack: listInput)
+                inputPositionStack.setPermutationToRender((cycleticks / 20) % inputPositionStack.items.length);
             listInput.addAll(listOutput);
             return listInput;
         }
@@ -94,8 +98,8 @@ public class PluginMachineRecipe extends PluginBase {
         boolean flag = false;
         for (int i = 0; i < listOutputRecipe.size(); i++) {
             ComponentOutputStacks componentOutputStacks = listOutputRecipe.get(i);
-            for (ItemStack output: componentOutputStacks.outputs)
-                if (ItemStackUtils.areItemEqual(output, result)) {
+            for (int j = 0; j < componentOutputStacks.outputs.size(); j++)
+                if (ItemStackUtils.areItemsEqual(componentOutputStacks.outputs.get(j), result, componentOutputStacks.oredictSearches.get(j))) {
                     flag = true;
                     arecipes.add(new CachedMachineRecipe(listInputRecipe.get(i), componentOutputStacks, listExtraStrings.get(i)));
                 }
@@ -119,8 +123,8 @@ public class PluginMachineRecipe extends PluginBase {
         boolean flag = false;
         for (int i = 0; i < listInputRecipe.size(); i++) {
             ComponentInputStacks componentInputStacks = listInputRecipe.get(i);
-            for (ItemStack input: componentInputStacks.inputs)
-                if (ItemStackUtils.areItemEqual(input, ingredient)) {
+            for (int j = 0; j < componentInputStacks.inputs.size(); j++)
+                if (ItemStackUtils.areItemsEqual(componentInputStacks.inputs.get(j), ingredient, componentInputStacks.oredicts.get(j))) {
                     flag = true;
                     arecipes.add(new CachedMachineRecipe(componentInputStacks, listOutputRecipe.get(i), listExtraStrings.get(i)));
                 }
@@ -138,7 +142,7 @@ public class PluginMachineRecipe extends PluginBase {
         for (int i = 0; i < componentExtraStrings.strings.size(); i++)
             if (!componentExtraStrings.strings.get(i).isEmpty()) 
                 GuiDraw.drawStringC(componentExtraStrings.strings.get(i), componentExtraStrings.posX.get(i), componentExtraStrings.posY.get(i), 0x000000, false);
-    }
+   } 
     
     @Override
     public void loadTransferRects() {

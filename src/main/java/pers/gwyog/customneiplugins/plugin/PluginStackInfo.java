@@ -73,7 +73,7 @@ public class PluginStackInfo extends PluginBase {
             return this;
         ItemStack result = (ItemStack) results[0];
         for (ItemStack stack: PluginStackInfoManager.mapStackToPluginInfo.keySet()) {
-            if (ItemStackUtils.areItemEqual(stack, result)) {
+            if (ItemStackUtils.areItemsEqual(stack, result)) {
                 PluginStackInfo pluginStackInfo = new PluginStackInfo();
                 ComponentPluginStackInfo componentPluginStackInfo = PluginStackInfoManager.mapStackToPluginInfo.get(stack);
                 pluginStackInfo.setRecipePerPage(componentPluginStackInfo.recipePerPage);
@@ -95,7 +95,7 @@ public class PluginStackInfo extends PluginBase {
             return this;
         ItemStack ingredient = (ItemStack) ingredients[0];
         for (ItemStack stack: PluginStackInfoManager.mapStackToPluginInfo.keySet()) {
-            if (ItemStackUtils.areItemEqual(stack, (ItemStack) ingredient)) {
+            if (ItemStackUtils.areItemsEqual(stack, (ItemStack) ingredient)) {
                 PluginStackInfo pluginStackInfo = new PluginStackInfo();
                 ComponentPluginStackInfo componentPluginStackInfo = PluginStackInfoManager.mapStackToPluginInfo.get(stack);
                 pluginStackInfo.setRecipePerPage(componentPluginStackInfo.recipePerPage);

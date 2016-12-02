@@ -27,11 +27,11 @@
 	"plugin_recipes":[
 		{
 			"inputs":[ 
-				{"item": "minecraft:nether_star", "stacksize": "1", "posX": "25", "posY": "6"},
-				{"item": "minecraft:diamond", "stacksize": "1", "posX": "43", "posY": "6"}
+				{"item": "minecraft:nether_star", "stacksize": "1", "oredict": "false", "posX": "25", "posY": "6"},
+				{"item": "minecraft:diamond", "stacksize": "1", "oredict": "false", "posX": "43", "posY": "6"}
 			],
 			"outputs":[
-				{"item": "minecraft:dirt", "stacksize": "16", "posX": "119", "posY": "24"}
+				{"item": "minecraft:dirt", "stacksize": "16", "oredict_search": "false", "posX": "119", "posY": "24"}
 			],
 			"strings":[ 
 			]
