@@ -8,3 +8,11 @@ AchangCraft.neiplguin.minerTier1.title.name=热能采掘机
 AchangCraft.neiplguin.displayString1=78秒
 AchangCraft.neiplguin.displayString2=%d秒
 examplemod.neiplguin.fakeCraftingTableRecipe.title.name=假的合成台配方
+
+# Commands
+customneiplugins.command.invalid.info=§c参数输入错误!
+customneiplugins.command.reload.info=§a重载完成！§r 加载插件数: %d
+customneiplugins.command.status.info=§a已加载:§r %d, §e已禁用:§r %d, §c发生错误:§r %d
+customneiplugins.command.status_loaded.info=%s: §a已加载
+customneiplugins.command.status_disabled.info=%s: §e已禁用
+customneiplugins.command.status_errored.info=%s: §c发生错误

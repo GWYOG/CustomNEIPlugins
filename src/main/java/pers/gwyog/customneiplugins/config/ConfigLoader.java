@@ -20,6 +20,10 @@ import com.google.gson.JsonSyntaxException;
 
 import codechicken.nei.guihook.GuiContainerManager;
 import codechicken.nei.guihook.IContainerInputHandler;
+import codechicken.nei.recipe.GuiCraftingRecipe;
+import codechicken.nei.recipe.GuiUsageRecipe;
+import codechicken.nei.recipe.ICraftingHandler;
+import codechicken.nei.recipe.IUsageHandler;
 import codechicken.nei.recipe.TemplateRecipeHandler.RecipeTransferRect;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
@@ -43,6 +47,7 @@ import pers.gwyog.customneiplugins.plugin.component.ComponentInputStacks;
 import pers.gwyog.customneiplugins.plugin.component.ComponentOutputStacks;
 import pers.gwyog.customneiplugins.plugin.component.ComponentProgressBar;
 import pers.gwyog.customneiplugins.plugin.component.ComponentRectangle;
+import pers.gwyog.customneiplugins.plugin.manager.PluginMachineRecipeManager;
 import pers.gwyog.customneiplugins.plugin.manager.PluginStackInfoManager;
 import pers.gwyog.customneiplugins.plugin.manager.PluginStackInfoManager.ComponentPluginStackInfo;
 
@@ -50,21 +55,16 @@ public class ConfigLoader {
     public static final String[] PLUGIN_TYPES = {"PluginStackInfo", "PluginMachineRecipe"};
     public static Configuration config;
     public static String directoryPath;
+    public static List<String> loadedPlugins = new ArrayList<String>();
+    public static List<String> disabledPlugins = new ArrayList<String>();
+    public static List<String> erroredPlugins = new ArrayList<String>();
     
     public static void init(FMLPreInitializationEvent event) {
         directoryPath = event.getModConfigurationDirectory() + "/CustomNEIPlugins/";
         
         // Setting up the main config
         config = new Configuration(new File(directoryPath + "MainSettings.cfg"));
-        config.load();
-        config.addCustomCategoryComment("PluginStackInfo Settings", "You can configure the layout of all of the StackInfo Plugins here. (Tips: The width of the basic Gui is 176.)");
-        ModConfig.pluginSIDisplayItemStackPosX = config.get("PluginStackInfo Settings", "displayItemStackPosX", 75).getInt();
-        ModConfig.pluginSIDisplayItemStackPosY = config.get("PluginStackInfo Settings", "displayItemStackPosY", 0).getInt();
-        ModConfig.pluginSIDisplayStringPosX = config.get("PluginStackInfo Settings", "displayStringPosX", 5).getInt();
-        ModConfig.pluginSIDisplayStringPosY = config.get("PluginStackInfo Settings", "displayStringPosY", 20).getInt();
-        ModConfig.pluginSIDisplayStringWidth = config.get("PluginStackInfo Settings", "displayStringWidth", 156).getInt();
-        ModConfig.pluginSIDisplayStringVerticalIntervalOffset = config.get("PluginStackInfo Settings", "displayStringVerticalIntervalOffset", 2).getInt();
-        config.save();
+        loadModConfig();
         
         // Setting up the Plugin Folders
         for (String pluginType: PLUGIN_TYPES) {
@@ -95,6 +95,9 @@ public class ConfigLoader {
 
     }
     
+    /**
+     * Load all the plugins from json files to plugin managers.
+     */
     public static void loadPlugins() {
         // Load Plugins
         for (String pluginType: PLUGIN_TYPES) {
@@ -103,13 +106,45 @@ public class ConfigLoader {
                 File[] filePlugins = directoryPluginStackInfo.listFiles();
                 if (filePlugins != null)
                     for (File filePlugin: filePlugins)
-                        if (filePlugin.getName().endsWith(".json"))
-                            loadJsonPlugin(filePlugin);
+                        if (filePlugin.getName().endsWith(".json")) {
+                            int loadStatus = loadJsonPlugin(filePlugin);
+                            String fileName = filePlugin.getName().replace(".json", "");
+                            switch (loadStatus) {
+                            case -1: erroredPlugins.add(fileName);break;
+                            case 0 : disabledPlugins.add(fileName);break;
+                            case 1 : loadedPlugins.add(fileName);
+                            }
+                        }
             }
         }
     }
     
-    private static void loadJsonPlugin(File filePlugin) {
+    /**
+     * Reload all the plugins in-game.
+     */
+    public static void reloadPlugins() {
+        removeAllThePlugins();
+        loadModConfig();
+        loadPlugins();
+        NEIPluginConfig.registerAllThePlugins();
+    }
+    
+    /**
+     * Load the main config file of CustomNEIPlugins.
+     */
+    private static void loadModConfig() {
+        config.load();
+        config.addCustomCategoryComment("PluginStackInfo Settings", "You can configure the layout of all of the StackInfo Plugins here. (Tips: The width of the basic Gui is 176.)");
+        ModConfig.pluginSIDisplayItemStackPosX = config.get("PluginStackInfo Settings", "displayItemStackPosX", 75).getInt();
+        ModConfig.pluginSIDisplayItemStackPosY = config.get("PluginStackInfo Settings", "displayItemStackPosY", 0).getInt();
+        ModConfig.pluginSIDisplayStringPosX = config.get("PluginStackInfo Settings", "displayStringPosX", 5).getInt();
+        ModConfig.pluginSIDisplayStringPosY = config.get("PluginStackInfo Settings", "displayStringPosY", 20).getInt();
+        ModConfig.pluginSIDisplayStringWidth = config.get("PluginStackInfo Settings", "displayStringWidth", 156).getInt();
+        ModConfig.pluginSIDisplayStringVerticalIntervalOffset = config.get("PluginStackInfo Settings", "displayStringVerticalIntervalOffset", 2).getInt();
+        config.save();
+    } 
+    
+    private static int loadJsonPlugin(File filePlugin) {
         try {  
             JsonParser jsonParser=new JsonParser();
             JsonObject jsonObject=(JsonObject) jsonParser.parse(new FileReader(filePlugin));
@@ -117,7 +152,9 @@ public class ConfigLoader {
             Boolean pluginEnabled = jsonObject.get("plugin_enabled").getAsBoolean();
             int recipePerPage = jsonObject.get("plugin_recipe_per_page").getAsInt();
             String pluginUnlocalizedName = jsonObject.get("plugin_unlocalized_title_name").getAsString();
-            if (pluginType.equals("plugin_stack_info") && pluginEnabled) {  
+            if (!pluginEnabled)
+                return 0;
+            else if (pluginType.equals("plugin_stack_info")) {  
                 JsonArray pluginContent = jsonObject.get("plugin_content").getAsJsonArray();  
                 if (pluginContent != null && pluginContent.size() > 0) {
                     // Load the contents
@@ -136,7 +173,7 @@ public class ConfigLoader {
                     PluginStackInfoManager.registerPluginStackInfo(findItemsStack(itemName, 1), componentPluginStackInfo);
                 }
             }
-            else if (pluginType.equals("plugin_machine_recipe") && pluginEnabled) {
+            else if (pluginType.equals("plugin_machine_recipe")) {
                 // Load the Gui Texture Location
                 String pluginGuiTextureLocation = jsonObject.get("plugin_gui_texture").getAsString();   
                 
@@ -255,20 +292,16 @@ public class ConfigLoader {
                 pluginMachineRecipe.setListInputRecipe(listInputRecipe);
                 pluginMachineRecipe.setListOutputRecipe(listOutputRecipe);
                 pluginMachineRecipe.setListExtraStrings(listExtraStrings);
-                NEIPluginConfig.listPluginMachineRecipe.add(pluginMachineRecipe);
+                PluginMachineRecipeManager.listPluginMachineRecipe.add(pluginMachineRecipe);
             }
-        } catch (JsonIOException e) {
-            e.printStackTrace();
-        } catch (JsonSyntaxException e) {
-            e.printStackTrace();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            return 1;
         } catch (Exception e) {
             e.printStackTrace();
+            return -1;
         }
     }
     
-    public static ItemStack findItemsStack(String itemName, int stacksize) {
+    private static ItemStack findItemsStack(String itemName, int stacksize) {
         String[] temp = itemName.split(":");
         if (temp.length == 2)
             return new ItemStack(GameRegistry.findItem(temp[0], temp[1]), stacksize);
@@ -281,12 +314,39 @@ public class ConfigLoader {
         return null;
     }
     
-    public static Class getClass(String clazzPath) {
+    private static Class getClass(String clazzPath) {
         Class clazz = null;
         try {
             clazz = Class.forName(clazzPath);
         } catch (ClassNotFoundException e) {}
         return clazz;
+    }
+    
+    private static void removeAllThePlugins() {
+        removeCraftingHandlers();
+        removeUsageHandlers();
+        NEIPluginConfig.resetPluginManagers();
+        loadedPlugins.clear();
+        disabledPlugins.clear();
+        erroredPlugins.clear();
+    }
+    
+    private static void removeCraftingHandlers() {
+        Iterator iter = GuiCraftingRecipe.craftinghandlers.iterator();
+        while (iter.hasNext()) {
+            ICraftingHandler craftingHandler = (ICraftingHandler) iter.next();
+            if (craftingHandler instanceof PluginStackInfo || craftingHandler instanceof PluginMachineRecipe)
+                iter.remove();
+        }
+    }
+    
+    private static void removeUsageHandlers() {
+        Iterator iter = GuiUsageRecipe.usagehandlers.iterator();
+        while (iter.hasNext()) {
+            IUsageHandler usageHandler = (IUsageHandler) iter.next();
+            if (usageHandler instanceof PluginStackInfo || usageHandler instanceof PluginMachineRecipe)
+                iter.remove();
+        }
     }
     
 }

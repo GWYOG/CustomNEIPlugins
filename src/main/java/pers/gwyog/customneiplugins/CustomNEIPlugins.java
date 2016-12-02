@@ -6,8 +6,11 @@ import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.relauncher.Side;
+import pers.gwyog.customneiplugins.command.CommandCNP;
 import pers.gwyog.customneiplugins.config.ConfigLoader;
+import pers.gwyog.customneiplugins.network.CNPNetwork;
 import pers.gwyog.customneiplugins.plugin.NEIPluginConfig;
 
 @Mod(modid = CustomNEIPlugins.MODID, name = CustomNEIPlugins.MODNAME, version = CustomNEIPlugins.VERSION, dependencies = "required-after:NotEnoughItems")
@@ -27,6 +30,7 @@ public class CustomNEIPlugins {
             ConfigLoader.init(event);
             isCustomStuff2Loaded = Loader.isModLoaded("CustomStuff2");
         }
+        new CNPNetwork();
     }
     
     @EventHandler
@@ -35,6 +39,11 @@ public class CustomNEIPlugins {
             ConfigLoader.loadPlugins();
             NEIPluginConfig.loadConfigPostInit();
         }
-    } 
+    }
+    
+    @EventHandler
+    public void onServerStarting(FMLServerStartingEvent event) {
+        event.registerServerCommand(new CommandCNP());
+    }
     
 }

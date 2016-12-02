@@ -8,3 +8,11 @@ AchangCraft.neiplguin.minerTier1.title.name=Miner Tier 1
 AchangCraft.neiplguin.displayString1=78s
 AchangCraft.neiplguin.displayString2=%ds
 examplemod.neiplguin.fakeCraftingTableRecipe.title.name=Fake Crafting Table Recipe
+
+# Commands
+customneiplugins.command.invalid.info=§cInvalid arguments!
+customneiplugins.command.reload.info=§aDone！§r Loaded Plugins: %d
+customneiplugins.command.status.info=§aLoaded:§r %d, §eDisabled:§r %d, §cErrored:§r %d
+customneiplugins.command.status_loaded.info=%s: §aLoaded
+customneiplugins.command.status_disabled.info=%s: §eDisabled
+customneiplugins.command.status_errored.info=%s: §cErrored
