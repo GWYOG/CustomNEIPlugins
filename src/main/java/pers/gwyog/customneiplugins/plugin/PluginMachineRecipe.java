@@ -27,6 +27,7 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.gui.inventory.GuiCrafting;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import pers.gwyog.customneiplugins.CustomNEIPlugins;
 import pers.gwyog.customneiplugins.helper.CustomStuff2Helper;
@@ -37,6 +38,7 @@ import pers.gwyog.customneiplugins.plugin.component.ComponentOutputStacks;
 import pers.gwyog.customneiplugins.plugin.component.ComponentProgressBar;
 import pers.gwyog.customneiplugins.plugin.component.ComponentRectangle;
 import pers.gwyog.customneiplugins.util.ItemStackUtils;
+import pers.gwyog.customneiplugins.util.StringUtils;
 
 public class PluginMachineRecipe extends PluginBase {
     private List<ComponentInputStacks> listInputRecipe;
@@ -141,7 +143,7 @@ public class PluginMachineRecipe extends PluginBase {
         ComponentExtraStrings componentExtraStrings = cachedMachineRecipe.extraStrings;
         for (int i = 0; i < componentExtraStrings.strings.size(); i++)
             if (!componentExtraStrings.strings.get(i).isEmpty()) 
-                GuiDraw.drawStringC(componentExtraStrings.strings.get(i), componentExtraStrings.posX.get(i), componentExtraStrings.posY.get(i), 0x000000, false);
+                GuiDraw.drawStringC(StringUtils.parseUnlocalizedString(componentExtraStrings.strings.get(i)), componentExtraStrings.posX.get(i), componentExtraStrings.posY.get(i), 0x000000, false);
    } 
     
     @Override
