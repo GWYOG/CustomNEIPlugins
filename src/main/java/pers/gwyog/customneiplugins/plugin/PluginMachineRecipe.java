@@ -97,18 +97,12 @@ public class PluginMachineRecipe extends PluginBase {
     
     @Override
     public void loadCraftingRecipes(ItemStack result) {
-        boolean flag = false;
         for (int i = 0; i < listOutputRecipe.size(); i++) {
             ComponentOutputStacks componentOutputStacks = listOutputRecipe.get(i);
             for (int j = 0; j < componentOutputStacks.outputs.size(); j++)
-                if (ItemStackUtils.areItemsEqual(componentOutputStacks.outputs.get(j), result, componentOutputStacks.oredictSearches.get(j))) {
-                    flag = true;
+                if (ItemStackUtils.areItemsEqual(componentOutputStacks.outputs.get(j), result, componentOutputStacks.oredictSearches.get(j)))
                     arecipes.add(new CachedMachineRecipe(listInputRecipe.get(i), componentOutputStacks, listExtraStrings.get(i)));
-                }
         }
-        if (!flag)
-            super.loadCraftingRecipes(result);
-
     }
     
     @Override
@@ -122,17 +116,12 @@ public class PluginMachineRecipe extends PluginBase {
     
     @Override
     public void loadUsageRecipes(ItemStack ingredient) {
-        boolean flag = false;
         for (int i = 0; i < listInputRecipe.size(); i++) {
             ComponentInputStacks componentInputStacks = listInputRecipe.get(i);
             for (int j = 0; j < componentInputStacks.inputs.size(); j++)
-                if (ItemStackUtils.areItemsEqual(componentInputStacks.inputs.get(j), ingredient, componentInputStacks.oredicts.get(j))) {
-                    flag = true;
+                if (ItemStackUtils.areItemsEqual(componentInputStacks.inputs.get(j), ingredient, componentInputStacks.oredicts.get(j)))
                     arecipes.add(new CachedMachineRecipe(componentInputStacks, listOutputRecipe.get(i), listExtraStrings.get(i)));
-                }
         }
-        if (!flag)
-            super.loadUsageRecipes(ingredient);
     }
     
     @Override
