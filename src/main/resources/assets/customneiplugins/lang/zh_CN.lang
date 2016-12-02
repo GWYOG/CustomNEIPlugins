@@ -5,4 +5,6 @@ examplemod.neiplguin.apple.content.info2=苹果是一种低热量食物，每100
 
 # Example MachineRecipe Plugin
 AchangCraft.neiplguin.minerTier1.title.name=热能采掘机
+AchangCraft.neiplguin.displayString1=78秒
+AchangCraft.neiplguin.displayString2=%d秒
 examplemod.neiplguin.fakeCraftingTableRecipe.title.name=假的合成台配方

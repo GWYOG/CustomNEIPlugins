@@ -44,7 +44,7 @@
 				{"item": "Magneticraft:item.chunks", "stacksize": "1", "oredict_search": "false", "posX": "111", "posY": "19"}
 			],
 			"strings":[ 
-				{"string": "78s", "posX": "86", "posY": "36"}
+				{"string": "AchangCraft.neiplguin.displayString1", "posX": "86", "posY": "36"}
 			]
 		},
 		{
@@ -56,7 +56,7 @@
 				{"item": "Magneticraft:item.chunks:1", "stacksize": "1", "oredict_search": "false", "posX": "111", "posY": "19"}
 			],
 			"strings":[ 
-				{"string": "78s", "posX": "86", "posY": "36"}
+				{"string": "AchangCraft.neiplguin.displayString2_,78", "posX": "86", "posY": "36"}
 			]
 		}
 	]

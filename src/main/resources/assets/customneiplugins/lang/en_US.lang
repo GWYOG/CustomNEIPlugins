@@ -5,4 +5,6 @@ examplemod.neiplguin.apple.content.info2=Still should be something about the app
 
 # Example MachineRecipe Plugin
 AchangCraft.neiplguin.minerTier1.title.name=Miner Tier 1
+AchangCraft.neiplguin.displayString1=78s
+AchangCraft.neiplguin.displayString2=%ds
 examplemod.neiplguin.fakeCraftingTableRecipe.title.name=Fake Crafting Table Recipe
