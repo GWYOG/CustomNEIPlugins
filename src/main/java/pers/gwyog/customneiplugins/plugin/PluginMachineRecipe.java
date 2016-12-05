@@ -100,8 +100,10 @@ public class PluginMachineRecipe extends PluginBase {
         for (int i = 0; i < listOutputRecipe.size(); i++) {
             ComponentOutputStacks componentOutputStacks = listOutputRecipe.get(i);
             for (int j = 0; j < componentOutputStacks.outputs.size(); j++)
-                if (ItemStackUtils.areItemsEqual(componentOutputStacks.outputs.get(j), result, componentOutputStacks.oredictSearches.get(j)))
+                if (ItemStackUtils.areItemsEqual(componentOutputStacks.outputs.get(j), result, componentOutputStacks.oredictSearches.get(j))) {
                     arecipes.add(new CachedMachineRecipe(listInputRecipe.get(i), componentOutputStacks, listExtraStrings.get(i)));
+                    continue;
+                }
         }
     }
     
@@ -119,21 +121,21 @@ public class PluginMachineRecipe extends PluginBase {
         for (int i = 0; i < listInputRecipe.size(); i++) {
             ComponentInputStacks componentInputStacks = listInputRecipe.get(i);
             for (int j = 0; j < componentInputStacks.inputs.size(); j++)
-                if (ItemStackUtils.areItemsEqual(componentInputStacks.inputs.get(j), ingredient, componentInputStacks.oredicts.get(j)))
+                if (ItemStackUtils.areItemsEqual(componentInputStacks.inputs.get(j), ingredient, componentInputStacks.oredicts.get(j))) {
                     arecipes.add(new CachedMachineRecipe(componentInputStacks, listOutputRecipe.get(i), listExtraStrings.get(i)));
+                    continue;
+                }
         }
     }
     
     @Override
     public void drawExtras(int recipe) {
-        if (this.progressBar != null)
-            drawProgressBar(progressBar.posX, progressBar.posY, progressBar.textureX, progressBar.textureY, progressBar.width, progressBar.height, progressBar.ticks, progressBar.direction);
         CachedMachineRecipe cachedMachineRecipe = (CachedMachineRecipe) arecipes.get(recipe);
         ComponentExtraStrings componentExtraStrings = cachedMachineRecipe.extraStrings;
         for (int i = 0; i < componentExtraStrings.strings.size(); i++)
             if (!componentExtraStrings.strings.get(i).isEmpty()) 
                 GuiDraw.drawStringC(StringUtils.parseUnlocalizedString(componentExtraStrings.strings.get(i)), componentExtraStrings.posX.get(i), componentExtraStrings.posY.get(i), 0x000000, false);
-   } 
+    } 
     
     @Override
     public void loadTransferRects() {
@@ -195,15 +197,28 @@ public class PluginMachineRecipe extends PluginBase {
     }
     
     @Override
+    public void drawForeground(int recipe) {
+        GL11.glColor4f(1, 1, 1, 1);
+        GL11.glDisable(GL11.GL_LIGHTING);
+        if (this.getGuiTexture() != null && !this.getGuiTexture().isEmpty() && this.progressBar != null) {
+            CCRenderState.changeTexture(getGuiTexture());
+            drawProgressBar(progressBar.posX, progressBar.posY, progressBar.textureX, progressBar.textureY, progressBar.width, progressBar.height, progressBar.ticks, progressBar.direction);    
+        }
+        drawExtras(recipe);
+    }
+    
+    @Override
     public void drawBackground(int recipe) {
         GL11.glColor4f(1, 1, 1, 1);
         if (!this.guiBackgroundTextureLocation.equals("nei:textures/gui/recipebg.png") && recipe % recipiesPerPage() == 0) {
             CCRenderState.changeTexture(this.guiBackgroundTextureLocation);
             GuiDraw.drawTexturedModalRect(-5, -16, 0, 0, 176, 166);
         }
-        CCRenderState.changeTexture(getGuiTexture());
-        GuiDraw.drawTexturedModalRect(0, 0, this.guiOffset.offsetX, this.guiOffset.offsetY, 166, 65);
-    } 
+        if (this.getGuiTexture() != null && !this.getGuiTexture().isEmpty()) {
+            CCRenderState.changeTexture(getGuiTexture());
+            GuiDraw.drawTexturedModalRect(0, 0, this.guiOffset.offsetX, this.guiOffset.offsetY, 166, 65);
+        }
+     } 
     
     // Customized TransferRectHandler
     public static class CustomRecipeTransferRectHandler extends TemplateRecipeHandler.RecipeTransferRectHandler {   
@@ -243,7 +258,7 @@ public class PluginMachineRecipe extends PluginBase {
               
         public String getGuiCS2Name(GuiContainer gui) {
             GuiCSContainer guiCSContainer = (GuiCSContainer) gui;
-            Class guiCSContainerClazz = gui.getClass();
+            Class guiCSContainerClazz = gui.getClass().getSuperclass();
             try {
                 Field field = guiCSContainerClazz.getDeclaredField("gui");
                 field.setAccessible(true);
@@ -406,7 +421,7 @@ public class PluginMachineRecipe extends PluginBase {
         pluginMachineRecipe.listExtraStrings = this.listExtraStrings;
         pluginMachineRecipe.progressBar = this.progressBar;
         pluginMachineRecipe.guiOffset = this.guiOffset;
-        return pluginMachineRecipe;
+        return pluginMachineRecipe;       
     } 
     
 }
